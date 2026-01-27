@@ -22,6 +22,20 @@ namespace LibraryManagementSystem.Controllers
         {
             var books = await _db.Books
                 .Include(b => b.Member)
+                .Select(b => new
+                {
+                    b.Id,
+                    b.ISBN,
+                    b.Title,
+                    b.Author,
+                    b.IsBorrowed,
+                    b.MemberId,
+                    Member = b.Member == null ? null : new
+                    {
+                        b.Member.Id,
+                        b.Member.FullName
+                    }
+                })
                 .ToListAsync();
 
             return Ok(books);
